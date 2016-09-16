@@ -1,0 +1,7 @@
+Departments 
+<select v-model="selected" class="form-control" style="width: auto; display: inline">
+    <option>All</option>
+    <option value="{{ dep.id }}" v-for="dep in $parent.departments">
+    	{{ dep.name }}
+    </option>
+</select>

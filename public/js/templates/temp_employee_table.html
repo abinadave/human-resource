@@ -1,0 +1,99 @@
+
+<div class="container" style="font-size: 12px">
+
+   <label>Search for Employee
+      <input type="text" class="form-control" v-model="search" style="border-radius: 18px">
+   </label>
+
+   &nbsp;&nbsp;&nbsp;<cbo-department></cbo-department>
+
+   &nbsp;&nbsp;&nbsp;<cbo-designation></cbo-designation>
+
+   <button @click="createAttendance()" style="margin-top: 22px" class="btn btn-info btn-sm pull-right">Attendance
+   <span class="badge">{{ checkedEmps.length }}</span>
+   </button>&nbsp;&nbsp;&nbsp;
+   <button @click="addPicure()" class="btn btn-xs btn-default">update picture</button>
+   <hr>
+  <label>Check All
+      <input type="checkbox" v-model="checkAll">
+  </label>
+   <table class="table table-hover table-bordered table-condensed" id="tbl-emp">
+       <thead>
+           <tr class="text-primary" style="font-weight: bold; font-size: 12px">
+              <th width="500">Fullname</th>
+              <th width="200" class="text-center">Department</th>
+              <th width="200" class="text-center">Designation</th>
+              <th width="70" class="text-center">Rate per day</th>
+              <th width="1"></th>
+              <th width="1"></th>
+           </tr>
+       </thead>
+
+       <tbody id="list-of-emps">
+           <tr @mouseenter="displayProfilePicture(emp.id)" id="emp-tr-{{ emp.id }}" @click="setCurretId(emp.id)" v-for="emp in employees | filterBy search in 'fullname' 'department' 'designation' 'age' 'rpd' 'dp_name' 'desig_name'">
+              <td style="font-weight: bolder">
+                  <input type="checkbox" value="{{ emp.id }}" @change="changeChk($event)"/>
+                  {{ emp.fullname | uppercase }}
+              </td>
+              <td class="text-center">{{ getDepartment(emp) }}</td>
+              <td class="text-center">{{ getDesignation(emp) }}</td>
+              <td class="text-center">{{ emp.rpd | currency '' }}</td>
+              <td><a style="cursor: pointer" @click="deleteEmployee(emp)"><span class="glyphicon glyphicon-remove"></span></a></td>
+              <td><a style="cursor: pointer" @click="showModalUpdate(emp)"><span class="glyphicon glyphicon-pencil"></span></a></td>
+           </tr>
+       </tbody>
+
+   </table>
+   
+</div>
+
+<div class="modal fade" id="modalUpdateEmployee" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 40%">
+      <form @submit="updateEmployee($event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Update Employee</h4>
+            </div>
+            <div class="modal-body" style="padding: 25px">
+                <input type="hidden" v-model="update_hidden_id">
+                <label>Fullname
+                   <input type="text" class="form-control" v-model="update_fullname" />
+                </label>
+                
+                <label>Department
+                   <select style="width: 215px" v-model="update_department" class="form-control">
+                      <option value="0" selected disabled>Select Department</option>
+                      <option value="{{ department.id }}" v-for="department in departments | orderBy 'name'">
+                          {{ department.name | uppercase }}
+                      </option>
+                   </select>
+                </label>
+                
+                 <label>Designation
+                    <select style="width: 215px" v-model="update_designation" class="form-control">
+                        <option value="0" selected disabled>Select Designation</option>
+                        <option value="{{ model.id }}" v-for="model in designations | orderBy 'name'">
+                            {{ model.name | uppercase }}
+                        </option>
+                    </select>
+                  </label>
+
+                <label>Rate per day
+                   <input type="text" v-model="update_rpd" class="form-control" />
+                </label>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+          </form>  
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+<modal-attendance></modal-attendance>
+<modal-picemp></modal-picemp>

@@ -1,0 +1,26 @@
+.tr-wb {
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.tr-2 {
+	font-weight: bold;
+}
+
+
+
+#the-body { 
+ 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+@media print  
+{
+    div{
+        page-break-inside: avoid;
+    }
+}
+

@@ -1,0 +1,29 @@
+<div class="modal fade" id="modal-update-used" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form @submit="submitForm($event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Update User</h4>
+            </div>
+            <div class="modal-body">
+                <label>Fullname
+                    <input type="text" class="form-control" v-model="namess">
+                </label>
+                <label>Email
+                    <input type="text" class="form-control" v-model="email">
+                </label>
+                <label>Password
+                    <input type="text" class="form-control" v-model="password">
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+      </form>
+    </div>
+    <!-- /.modal-dialog -->
+</div>

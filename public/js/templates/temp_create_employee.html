@@ -1,0 +1,83 @@
+
+<div class="container col-md-4">
+    <div class="panel panel-default" style="padding: 20px">
+			<form @submit="submitForm($event)">
+			    <label>
+			    	Employee name
+			    	<input type="text" v-model="fullname" class="form-control" autofocus/>
+			    </label>
+			    <label>
+			    	Rate per day
+			    	<input type="text" v-model="rpd" class="form-control" />
+			    </label>
+			    <label>
+			    	Department
+			    	<select v-model="department" class="form-control">
+			    	    <option value="0" selected disabled>Select Department</option>
+			    	    <option value="{{ department.id }}" v-for="department in departments | orderBy 'name'">
+			    	    	{{ department.name | uppercase }}
+			    	    </option>
+			    	</select>
+			    </label>
+			    <label>
+			    	Designation (Position)
+			    	<select v-model="designation" class="form-control">
+			    	    <option value="0" selected disabled>Select Designation</option>
+			    	    <option value="{{ model.id }}" v-for="model in designations | orderBy 'name'">
+			    	    	{{ model.name | uppercase }}
+			    	    </option>
+			    	</select>
+			    </label>
+			    <br>
+			    <button type="submit" class="btn btn-primary btn-xs">SUBMIT</button>
+			</form>
+    </div>
+</div>
+
+<div class="container col-md-4">
+    <div class="panel panel-default" style="padding: 20px">
+			<form @submit="saveDepartment($event)">
+			    <label>
+			    	Department name
+			    	<input type="text" v-model="add_department" class="form-control" autofocus/>
+			    </label>
+			    <button class="btn btn-primary btn-xs">Save</button>
+			</form> <hr>
+			<div>
+			  <div style="overflow: auto; height: 400px; font-size: 12px">
+		          <ul class="list-group">
+		             <li class="list-group-item" v-for="model in departments | orderBy 'name'">
+		           		 {{ model.name | uppercase }}
+		           		 <a style="cursor: pointer" class="pull-right" @click="removeDepartment(model)"><span class="glyphicon glyphicon-remove text-danger"></span></a>
+ 		           		 <a style="cursor: pointer; margin-right: 5px" class="pull-right" @click="editDepartment(model)"><span class="glyphicon glyphicon-edit text-primary"></span></a>
+
+		             </li>
+		          </ul>
+		       </div>
+			</div>       
+    </div>
+</div>
+
+ <div class="container col-md-4">
+    <div class="panel panel-default" style="padding: 20px">
+			<form @submit="saveDesignation($event)">
+			    <label>
+			    	Designation name
+			    	<input type="text" v-model="add_designation" class="form-control" autofocus/>
+			    </label>
+			    <button type="submit" class="btn btn-primary btn-xs">Save</button>
+			</form><hr>
+			<div>
+			  <div style="overflow: auto; height: 400px; font-size: 12px">
+		          <ul class="list-group">
+		             <li class="list-group-item" v-for="model in designations | orderBy 'name'">
+		           		 {{ model.name | uppercase }}
+
+		           		 <a @click="removeDesignation(model)" style="cursor: pointer" class="pull-right text-danger"><span class="glyphicon glyphicon-remove"></span></a>
+		           		 <a style="margin-right: 6px; cursor: pointer" @click="editDesignation(model)" class="pull-right text-primary"><span class="glyphicon glyphicon-edit"></span></a>
+		             </li>
+		          </ul>
+		       </div>
+			</div>    
+    </div>
+</div>

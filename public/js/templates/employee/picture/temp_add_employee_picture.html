@@ -1,0 +1,25 @@
+    <div class="modal fade" id="modal-add-employee-pic" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 25%">
+          <form @submit="submitForm($event)" id="form-upload-emp">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Employee Picture</h4>
+                </div>
+                <div class="modal-body">
+                	<label>
+                       fullname
+                       <input type="text" v-model="$parent.update_fullname" class="form-control" disabled/>
+                    </label>
+                    <div id="photo-upload"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save image</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+           </form> 
+        </div>
+        <!-- /.modal-dialog -->
+    </div>

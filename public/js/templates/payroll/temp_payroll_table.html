@@ -1,0 +1,52 @@
+<div class="container">
+
+    <input v-model="search" type="text" class="form-control pull-right" style="margin-bottom: 20px; border-radius: 15px; width: 20%" autofocus />
+    
+    <table class="table table-hover table-bordered table-condensed">
+
+       <thead>
+           <tr class="text-info">
+           	   <th width="10">PID</th>
+           	   <th class="text-center" width="250">Date range</th>
+           	   <th class="text-center">Date payrolled</th>
+           	   <th class="text-right">SSS</th>
+           	   <th class="text-right">Phil</th>
+           	   <th class="text-right">Advances</th>
+           	   <th class="text-right">Net amount</th>
+               <th width="10"></th>
+           </tr>
+       </thead>
+
+       <tbody>
+           <tr v-for="payroll in payrolls | filterBy search in 'date' 'sss' 'phil' 'advances' 'net'">
+                <td>
+                    {{ payroll.id }}
+                </td>
+                <td class="text-center">
+                    {{ formatDate(payroll.date_from) }} - {{ formatDate(payroll.date_to) }}
+                </td>
+                <td class="text-center">
+                    {{ setDate(payroll) }} {{ formatDate(payroll.created_at) }}
+                </td>
+                <td class="text-right">
+                    {{ payrollTotal(payroll, 'sss') | currency '' }}
+                </td>
+                <td class="text-right">
+                    {{ payrollTotal(payroll, 'phil') | currency '' }}
+                </td>
+                <td class="text-right">
+                    {{ payrollTotal(payroll, 'advances') | currency '' }}
+                </td>
+                <td class="text-right">
+                    {{ getNet(payroll) | currency '' }}
+                </td>
+                <td>
+                    <a style="cursor: pointer" @click="showModalOpenPayroll(payroll)"><i class="fa fa-view"></i>show</a>
+                </td>
+           </tr>
+       </tbody>
+
+   </table>
+   <modal-payrollemp></modal-payrollemp>
+</div>
+
