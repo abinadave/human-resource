@@ -14,6 +14,7 @@
            	   <th class="text-right">Advances</th>
            	   <th class="text-right">Net amount</th>
                <th width="10"></th>
+               <th width="10"></th>
            </tr>
        </thead>
 
@@ -43,6 +44,7 @@
                 <td>
                     <a style="cursor: pointer" @click="showModalOpenPayroll(payroll)"><i class="fa fa-view"></i>show</a>
                 </td>
+                <td><a class="text-danger" style="cursor: pointer" @click="deletePayroll(payroll)"><i class="glyphicon glyphicon-trash"></i></a></td>
            </tr>
        </tbody>
 

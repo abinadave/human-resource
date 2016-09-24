@@ -1,5 +1,6 @@
 // This set's up the module paths for underscore and backbone
-require.config({ 
+require.config({
+	waitSeconds : 20, 
     'paths': { 
 		"vue": "libs/vue/vue",
 		"vue-resource": "libs/vue/vue-resource",
@@ -9,7 +10,8 @@ require.config({
 		"css": "libs/require-css/css",
 		'underscore': "libs/backbone/underscore-min",
 		'fileuploader': 'libs/fileuploader/fileuploader',
-		"jqueryui": "libs/jquery-ui/jquery-ui.min"
+		"jqueryui": "libs/jquery-ui/jquery-ui.min",
+		"printarea": "libs/print-area/demo/jquery.PrintArea"
 	},
 	
 	'shim': 

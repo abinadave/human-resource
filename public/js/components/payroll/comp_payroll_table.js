@@ -9,7 +9,8 @@ define([
 	function(Vue, VueResource, template, CompModalPayrollEmp, moment, _) {
     
     Vue.use(VueResource);
-
+    Vue.http.headers.common['X-CSRF-TOKEN'] = document.querySelector('#token').getAttribute('value');
+    
     var Vue = Vue.extend({
 
     	template: template,
@@ -29,22 +30,45 @@ define([
             }
         },
 
-        props: ['search','current_payroll','current_total_net'],
+        props: ['search','current_payroll','current_total_net','current_total_advances','current_total_phil','current_total_sss'],
 
         watch: {
             'current_payroll': function (val, oldVal) {
                 var self = this;
                 var child = self.$children[0];
                 var emps = _.where(self.payrollemps, {pid: val}, false);
-                var total = 0;
-                emps.forEach(function(emp) {
-                    total += child.getNetOfEmp(emp);
-                });
-                self.current_total_net = total;
+                var total_net = 0;
+                emps.forEach(function(emp) { total_net += child.getNetOfEmp(emp); });
+                self.current_total_sss = self.getReduced(emps, 'sss');
+                self.current_total_phil = self.getReduced(emps, 'phil');
+                self.current_total_advances = self.getReduced(emps, 'advances');
+                self.current_total_net = total_net;
             }
         },
 
     	methods: {
+
+            getReduced(emps, key){
+                return _.reduce(_.pluck(emps, key), function(memo, num){ return memo + num; }, 0);
+            },
+
+            deletePayroll(model){
+                var self = this;
+                var rs = _.where(self.payrolls, {id: model.id});
+                if (rs.length) {
+                    var ok = confirm('Are you sure ?');
+                    if (ok) {
+                        var resource = self.$resource('payroll/{id}');
+                        resource.delete({id: model.id}).then( (response) => {
+                            self.payrolls.$remove(model);
+                        }, (errorResp) => {
+                            console.log(errorResp);
+                        });
+                    }
+                }else {
+                    alert('cant find payroll with id of: '+model.id);
+                }
+            },
 
             getFullname(i){
                 var self = this;

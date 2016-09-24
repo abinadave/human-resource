@@ -1,0 +1,37 @@
+	<div class="modal fade" id="modal-update-contract" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog" style="width: 400px">
+	      <form @submit="saveNewContract($event)">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                <h4 class="modal-title" id="myModalLabel">Update Contract</h4>
+	            </div>
+	            <div class="modal-body">
+	            	<h5>Latest Contract</h5>
+	            	<label>
+	            	    Start: <input type="text" class="form-control" v-model="startContract" disabled>
+	            	</label>
+	            	<label>
+	            		End: <input type="text" class="form-control" v-model="endContract" disabled>
+	            	</label>
+	            	<hr>
+
+	            	<h4>New contract</h4>
+	            	<label>Start
+                        <input type="date" class="form-control" v-model="contract.start" />
+	            	</label>
+	            	<label>End
+                        <input type="date" class="form-control" v-model="contract.end"/>
+	            	</label>
+
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	                <button type="submit" class="btn btn-primary">Save changes</button>
+	            </div>
+	        </div>
+	       </form> 
+	        <!-- /.modal-content -->
+	    </div>
+	    <!-- /.modal-dialog -->
+	</div>

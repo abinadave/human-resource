@@ -89,32 +89,45 @@ define(
             },
 
             submitAttendance(event){
-                var self = this;
+                var self = this;                
 
                 var obj = {
                     date_from: self.date_from,
                     date_to: self.date_to                
                 };
 
-
                 if (moment(obj.date_from).isValid() === false || moment(obj.date_to).isValid() === false) {
                     alert('Invalid payroll date.');
-                }else {
-                    // self.$http.post('/payroll', obj).then((response) => {
-                    //     var json = JSON.parse(response.body);
-                    //     if (json.success) {
-                    //         self.savePayrollemps(json.id);
-                    //     }
-                    // }, (errorResp) => {
-
-                    // });
+                }else {                    
+                    self.$http.post('/payroll', obj).then( (response) => {
+                        var json = JSON.parse(response.body);
+                        if (json.success) {
+                            var pid = json.id;
+                            self.savePayrollemps(pid, self.validateEmps());
+                        }
+                    }, (errorResp) => {
+                        console.log(errorResp);
+                    });                  
                 }
-                
             },
 
-            savePayrollemps(pid){
+            validateEmps(){
                 var self = this;
                 var emps = self.$parent.checkedEmps;
+                var props = ['hrs_work','phil','sss','advances'];
+                emps.forEach(function(model) {
+                    _.each(props, function(key){
+                        if (model[key] === undefined) {
+                            model[key] = 0;
+                        }
+                    });
+                });
+                return emps;
+            },
+
+            savePayrollemps(pid, emps){
+                var self = this;
+                // var emps = self.$parent.checkedEmps;
                 self.$http.post('/payrollemps', { emps: emps, pid: pid }).then( (response) => {
                     var json = JSON.parse(response.body);
                     if (Number(json.saved) === Number(json.emp_length)) {

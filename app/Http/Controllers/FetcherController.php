@@ -10,6 +10,7 @@ use App\Payroll as Payroll;
 use App\Employee as Employee;
 use App\Designation as Designation;
 use App\Department as Department;
+use App\Contract as Contract;
 
 class FetcherController extends Controller
 {
@@ -30,7 +31,8 @@ class FetcherController extends Controller
     	return response()->json([
     		'designations' => Designation::all(),
     		'departments'  => Department::all(),
-    		'employees'    => Employee::all()
+    		'employees'    => Employee::all(),
+            'contracts'    => Contract::all()
     	]);
     }
 }

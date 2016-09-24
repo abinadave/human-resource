@@ -18,6 +18,12 @@ define([
 
         methods: {
 
+            printModal(){
+                require(['printarea'], function(printArea){
+                    $('#print-this').printArea();
+                });
+            },
+
             getNetOfEmp(emp){
                 var self = this;
                 var rph = emp.rpd / 8;

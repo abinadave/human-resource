@@ -1,7 +1,7 @@
 
 <div class="container col-md-4">
     <div class="panel panel-default" style="padding: 20px">
-			<form @submit="submitForm($event)">
+			<form @submit="saveEmployee($event)">
 			    <label>
 			    	Employee name
 			    	<input type="text" v-model="fullname" class="form-control" autofocus/>
@@ -13,7 +13,7 @@
 			    <label>
 			    	Department
 			    	<select v-model="department" class="form-control">
-			    	    <option value="0" selected disabled>Select Department</option>
+			    	    <option value="0" selected disabled>Department</option>
 			    	    <option value="{{ department.id }}" v-for="department in departments | orderBy 'name'">
 			    	    	{{ department.name | uppercase }}
 			    	    </option>
@@ -22,14 +22,25 @@
 			    <label>
 			    	Designation (Position)
 			    	<select v-model="designation" class="form-control">
-			    	    <option value="0" selected disabled>Select Designation</option>
+			    	    <option value="0" selected disabled>Designation</option>
 			    	    <option value="{{ model.id }}" v-for="model in designations | orderBy 'name'">
 			    	    	{{ model.name | uppercase }}
 			    	    </option>
 			    	</select>
 			    </label>
+			    <hr>
+			    <label class="label label-warning">Contract</label>
 			    <br>
-			    <button type="submit" class="btn btn-primary btn-xs">SUBMIT</button>
+			    <label>
+			       Start
+			       <input v-model="start_contract" type="date" class="form-control contract-dates">
+			    </label>
+			    <label>
+			       End
+			       <input v-model="end_contract" type="date" class="form-control contract-dates">
+			    </label>
+			    <br><br>
+			    <button type="submit" class="btn btn-primary btn-block">SUBMIT</button>
 			</form>
     </div>
 </div>

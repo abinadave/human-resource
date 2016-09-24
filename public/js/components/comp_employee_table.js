@@ -2,15 +2,17 @@ define([
 	'vue',
 	'vue-resource',
 	'underscore',
+	'moment',
 	'text!templates/temp_employee_table.html',
 	'components/department/comp_cbo_for_employee_table',
 	'components/designation/comp_cbo_designation_emp_tbl',
 	'components/employee/attendance/comp_modal_create_attendance',
 	'components/employee/picture/comp_add_employee_picture',
+	'components/contract/comp_modal_update_contract',
 	'css!libs/css/style.css'
-	], function(Vue, VueResource, _, template, CompCboForEmployeeTbl,
+	], function(Vue, VueResource, _, moment, template, CompCboForEmployeeTbl,
 		CompCboDesigEmpTbl, CompModalCreateAttndnce, CompAddEmpPic,
-		CssStyle1
+		CompModalUpdateContract, CssStyle1
 	) {
 
     Vue.use(VueResource);
@@ -27,6 +29,7 @@ define([
     			checkedEmps: [],
     			currentId: '',
     			checkAll: false,
+    			contracts: []
     		};
 		},
 
@@ -47,22 +50,59 @@ define([
 			'cbo-department': CompCboForEmployeeTbl,
 			'cbo-designation': CompCboDesigEmpTbl,
 			'modal-attendance': CompModalCreateAttndnce,
-			'modal-picemp': CompAddEmpPic
+			'modal-picemp': CompAddEmpPic,
+			'update-contract': CompModalUpdateContract
 		},
 
-    	props: ['employees','departments','designations','search','update_fullname','update_rpd','update_department','update_designation','update_hidden_id'],
+    	props: [
+    		'employees','departments','designations','search','update_fullname',
+    		'update_rpd','update_department','update_designation','update_hidden_id',
+    		'updateStartContract','updateEndContract'],
     	
     	template: template,
 
     	created(){
 			var self = this;
-			this.fetchDatas();
+			self.fetchDatas();
 		},
 		
 		methods: {
 
 			displayProfilePicture(emp_id){
 				
+			},
+
+			udpateEmpContract(){
+				var self = this;
+				var emp = self.getEmp(self.currentId);
+				if (typeof emp === 'object') {
+					var contract = self.getLatestContract(emp).split('-');
+					self.updateStartContract = $.trim(contract[0]);
+					self.updateEndContract = $.trim(contract[1]);
+					$('#modal-update-contract').modal('show');
+				}
+			},
+
+			getEmp(emp_id){
+				var rs = _.where(this.employees, {id: emp_id});
+				if (rs.length) {
+					return _.first(rs);
+				}else {
+					return null;
+				}
+			},
+
+			getLatestContract(emp){
+				var self = this;
+				var rs = _.where(self.contracts, {emp_id: emp.id});
+				if (rs.length) {
+					var max_id = _.max(_.pluck(rs, 'id'));
+					var rsContract = _.where(rs, {id: max_id});
+					if (rsContract.length) {
+						var model = _.first(rsContract);
+						return moment(model.start).format('MMMM DD, YYYY') + ' - ' + moment(model.end).format('MMMM DD, YYYY dddd');
+					}
+				}
 			},
 
 			addPicure(){
@@ -73,8 +113,8 @@ define([
 
 			setCurretId(i){
 				this.currentId = i;
-				$('#tbl-emp').find('tr').removeClass('emp-tr-click');
-				$('#emp-tr-'+i).addClass('emp-tr-click');
+				$('#tbl-emp').find('tr').removeClass('text-danger emp-tr-click');
+				$('#emp-tr-'+i).addClass('text-danger emp-tr-click');
 			},
 
 			changeChk(event){
@@ -206,6 +246,7 @@ define([
 				var self = this;
 				self.$http.get('/route_employee_tbl').then((response) => {
 					var json = JSON.parse(response.body);
+					self.contracts = json.contracts;
 					self.designations = json.designations;
 					self.departments = json.departments;
 					self.employees = json.employees;

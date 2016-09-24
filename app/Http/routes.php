@@ -43,5 +43,8 @@ Route::group(['middleware' => 'web'], function(){
 	Route::get('payroll_list_route', 'FetcherController@forPayrollTable');
 	Route::get('route_employee_tbl', 'FetcherController@forEmployeeTable');
 
+	Route::delete('payroll/{id}', 'PayrollController@destroy');
+	Route::post('contract', 'ContractController@create');
+
 });
 

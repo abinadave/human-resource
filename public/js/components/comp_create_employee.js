@@ -11,12 +11,22 @@ define(
 
     var Component = Vue.extend({
     	template: template,
-    	props: ['employees','departments','designations','fullname','department','rpd','designation','add_department','add_designation'],
+    	
+        props: ['employees','departments','designations','fullname','department','rpd','designation','add_department','add_designation','start_contract','end_contract'],
+        
         created(){
             this.fetchDepartments();
             this.fetchDesignations();
+            // this.initJQueryUi();
         },
+        
     	methods: {
+
+            initJQueryUi(){
+                require(['jqueryui'], function(jquery){
+                    $('.contract-dates').datepicker();
+                });
+            },
 
             removeDesignation(model){
                 var self = this;
@@ -135,28 +145,39 @@ define(
                 });
             },
 
-    		submitForm(event){
+    		saveEmployee(event){
     			event.preventDefault();
                 var self = this;
-    			var obj = {
-    				fullname: this.fullname,
-    				rpd: this.rpd,
-    				department: this.department,
-    				designation: this.designation
-    			};
-    			  this.$http.post('/employee', obj).then((response) => {
+    			var obj = { fullname: this.fullname, rpd: this.rpd, department: this.department, designation: this.designation };
+    			  
+                  self.$http.post('/employee', obj).then((response) => {
                      var json = $.parseJSON(response.body);
                      if (json.id > 0) {
+                        self.createContract(json.id);
                         self.fullname = '';
                         self.rpd = '';
                         self.department = '0';
                         self.designation = '';
                     }
-                     
-			      }, (response) => {
-			          // error callback
-			      });
+    		      }, (response) => {
+    		          // error callback
+    		      });
     		},
+
+            createContract(emp_id){
+                var self = this;
+                var obj = {
+                    emp_id: emp_id,
+                    start: self.start_contract,
+                    end: self.end_contract
+                };
+                self.$http.post('/contract', obj).then( (response) => {
+                    self.start_contract = '';
+                    self.end_contract = '';
+                }, (error) => {
+                    console.log('error in saving contract of employee, Error was: ' +error);
+                });
+            },
 
             saveDepartment(event){
                 event.preventDefault();

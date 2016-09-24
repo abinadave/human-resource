@@ -17,27 +17,31 @@
   <label>Check All
       <input type="checkbox" v-model="checkAll">
   </label>
+  &nbsp;&nbsp;/&nbsp;&nbsp;
+  <a style="cursor: pointer" @click="udpateEmpContract()">contract</a>
    <table class="table table-hover table-bordered table-condensed" id="tbl-emp">
        <thead>
            <tr class="text-primary" style="font-weight: bold; font-size: 12px">
-              <th width="500">Fullname</th>
+              <th width="300">Fullname</th>
+              <th width="70" class="text-center">Rate per day</th>
               <th width="200" class="text-center">Department</th>
               <th width="200" class="text-center">Designation</th>
-              <th width="70" class="text-center">Rate per day</th>
+              <th width="400" class="text-center">Contract</th>
               <th width="1"></th>
               <th width="1"></th>
            </tr>
        </thead>
 
        <tbody id="list-of-emps">
-           <tr @mouseenter="displayProfilePicture(emp.id)" id="emp-tr-{{ emp.id }}" @click="setCurretId(emp.id)" v-for="emp in employees | filterBy search in 'fullname' 'department' 'designation' 'age' 'rpd' 'dp_name' 'desig_name'">
+           <tr id="emp-tr-{{ emp.id }}" @click="setCurretId(emp.id)" v-for="emp in employees | filterBy search in 'fullname' 'department' 'designation' 'age' 'rpd' 'dp_name' 'desig_name'">
               <td style="font-weight: bolder">
                   <input type="checkbox" value="{{ emp.id }}" @change="changeChk($event)"/>
                   {{ emp.fullname | uppercase }}
               </td>
+              <td class="text-center">{{ emp.rpd | currency '' }}</td>
               <td class="text-center">{{ getDepartment(emp) }}</td>
               <td class="text-center">{{ getDesignation(emp) }}</td>
-              <td class="text-center">{{ emp.rpd | currency '' }}</td>
+              <td class="text-center">{{ getLatestContract(emp) }}</td>
               <td><a style="cursor: pointer" @click="deleteEmployee(emp)"><span class="glyphicon glyphicon-remove"></span></a></td>
               <td><a style="cursor: pointer" @click="showModalUpdate(emp)"><span class="glyphicon glyphicon-pencil"></span></a></td>
            </tr>
@@ -97,3 +101,4 @@
 
 <modal-attendance></modal-attendance>
 <modal-picemp></modal-picemp>
+<update-contract :emp-id="currentId" :start-contract="updateStartContract" :end-contract="updateEndContract"></update-contract>

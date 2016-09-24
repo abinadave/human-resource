@@ -3,15 +3,17 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel"><span class="text-primary">Payrol Period: &nbsp;</span> <b>{{ $parent.formatDate(payroll.date_from) }} - {{ $parent.formatDate(payroll.date_to) }}</b></h4>
-
+                <h4>Payroll</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-hover">
+              <div id="print-this">
+                <h4 class="modal-title text-center" id="myModalLabel"><span>PAYROLL PERIOD: &nbsp;</span> {{ $parent.formatDate(payroll.date_from) }} - {{ $parent.formatDate(payroll.date_to) }}</h4>
+                <hr/>
+                <table class="table table-hover table-bordered table-condensed">
                      <thead>
                         <tr>
                             <th>Fullname</th>
-                            <th>Designation</th>
+                            <th class="text-center">Designation</th>
                             <th class="text-right" width="50" title="rate per day">RPD</th>
                             <th class="text-right">SSS</th>
                             <th class="text-right">Phil.</th>
@@ -22,23 +24,27 @@
                      <tbody>
                            <tr v-for="emp in emps">
                                <td>{{ getFullname(emp.id) }}</td>
-                               <td>{{ getDesignation(emp.id) }}</td>
+                               <td class="text-center">{{ getDesignation(emp.id) }}</td>
                                <td class="text-right" title="Rate Per Day">{{ emp.rpd }}</td>
-                               <td class="text-right">{{ emp.sss }}</td>
-                               <td class="text-right">{{ emp.phil }}</td>
-                               <td class="text-right">{{ emp.advances }}</td>
-                               <td class="text-right">{{ getNetOfEmp(emp) | currency '' }}</td>
+                               <td class="text-right">{{ emp.sss | currency '' }}</td>
+                               <td class="text-right">{{ emp.phil | currency '' }}</td>
+                               <td class="text-right">{{ emp.advances | currency '' }}</td>
+                               <td class="text-right" style="font-weight: bolder">{{ getNetOfEmp(emp) | currency '' }}</td>
                            </tr>
                      </tbody>
                      <tr>
-                         <td colspan="6" class="text-center">Total</td>
-                         <td class="text-right">{{ $parent.current_total_net | currency 'Php '}}</td>
+                         <td colspan="3" class="text-center"></td>
+                         <td class="text-right text-info" style="font-weight: bolder">{{ $parent.current_total_sss | currency '' }}</td> 
+                         <td class="text-right text-info" style="font-weight: bolder">{{ $parent.current_total_phil | currency '' }}</td> 
+                         <td class="text-right text-info" style="font-weight: bolder">{{ $parent.current_total_advances | currency '' }}</td>
+                         <td class="text-right text-info" style="font-weight: bolder; font-size: 16px">{{ $parent.current_total_net | currency 'Php '}}</td>
                      </tr>
                 </table>
+              </div>  
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                <button type="button" class="btn btn-primary" title="print this table" @click="printModal()"><i class="glyphicon glyphicon-print"></i></button>
             </div>
         </div>
         <!-- /.modal-content -->
