@@ -1,0 +1,5 @@
+heroku buildpacks:set heroku/ruby
+
+
+
+DATABASE_URL:                postgres://uyobgudjyeturj:LUjxtLN70S-nBqnSrW8JKfelKw@ec2-54-243-47-46.compute-1.amazonaws.com:5432/dd7ish70sju57l
