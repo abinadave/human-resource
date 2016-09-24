@@ -12,12 +12,11 @@ define(
     var Component = Vue.extend({
     	template: template,
     	
-        props: ['employees','departments','designations','fullname','department','rpd','designation','add_department','add_designation','start_contract','end_contract'],
+        props: ['employees','departments','designations','fullname','department','rpd','designation','add_department','add_designation','start_contract','end_contract','date_hired'],
         
         created(){
             this.fetchDepartments();
             this.fetchDesignations();
-            // this.initJQueryUi();
         },
         
     	methods: {
@@ -147,8 +146,15 @@ define(
 
     		saveEmployee(event){
     			event.preventDefault();
+                
                 var self = this;
-    			var obj = { fullname: this.fullname, rpd: this.rpd, department: this.department, designation: this.designation };
+    			var obj = { 
+                    fullname: self.fullname, 
+                    rpd: self.rpd, 
+                    department: self.department, 
+                    designation: self.designation,
+                    date_hired: self.date_hired
+                };
     			  
                   self.$http.post('/employee', obj).then((response) => {
                      var json = $.parseJSON(response.body);
@@ -162,6 +168,7 @@ define(
     		      }, (response) => {
     		          // error callback
     		      });
+                  console.log(obj);
     		},
 
             createContract(emp_id){

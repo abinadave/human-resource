@@ -60,6 +60,7 @@ class EmployeeController extends Controller
         $emp->fullname = $request->input('fullname');
         $emp->department = $request->input('department');
         $emp->designation = $request->input('designation');
+        $emp->date_hired = $request->input('date_hired');
         $emp->rpd = $request->input('rpd');
         $emp->save();
         return response()->json([
