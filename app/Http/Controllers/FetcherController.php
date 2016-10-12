@@ -11,6 +11,7 @@ use App\Employee as Employee;
 use App\Designation as Designation;
 use App\Department as Department;
 use App\Contract as Contract;
+use App\PhotoEmployee as PhotoEmployee;
 
 class FetcherController extends Controller
 {
@@ -22,17 +23,19 @@ class FetcherController extends Controller
     		'employees'   => Employee::all(),
     		'payrolls'    => $sortedPayrolls->values()->all(),
     		'payrollemps' => Payrollemp::all(),
-            'designations'=> Designation::all()
+            'designations'=> Designation::all(),
+            'departments' => Department::all()
     	]);
     }
 
     public function forEmployeeTable()
     {
     	return response()->json([
-    		'designations' => Designation::all(),
-    		'departments'  => Department::all(),
-    		'employees'    => Employee::all(),
-            'contracts'    => Contract::all()
+    		'designations'    => Designation::all(),
+    		'departments'     => Department::all(),
+    		'employees'       => Employee::all(),
+            'contracts'       => Contract::all(),
+            'photo_employees' => PhotoEmployee::all()
     	]);
     }
 }

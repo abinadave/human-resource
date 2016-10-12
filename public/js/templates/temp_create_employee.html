@@ -13,7 +13,7 @@
 			    <label>
 			    	Department
 			    	<select v-model="department" class="form-control">
-			    	    <option value="0" selected disabled>Department</option>
+			    	    <option value="" selected disabled>Department</option>
 			    	    <option value="{{ department.id }}" v-for="department in departments | orderBy 'name'">
 			    	    	{{ department.name | uppercase }}
 			    	    </option>
@@ -22,18 +22,19 @@
 			    <label>
 			    	Designation (Position)
 			    	<select v-model="designation" class="form-control">
-			    	    <option value="0" selected disabled>Designation</option>
+			    	    <option value="" selected disabled>Designation</option>
 			    	    <option value="{{ model.id }}" v-for="model in designations | orderBy 'name'">
 			    	    	{{ model.name | uppercase }}
 			    	    </option>
 			    	</select>
 			    </label>
+			    <br>
 			    <label>
 			       Date Hired
 			       <input v-model="date_hired" type="date" class="form-control">
 			    </label>
 			    <hr>
-			    <label class="label label-warning">Contract</label>
+			    <label class="label label-warning">Contract</label><br>
 			    <label>
 			       Start
 			       <input v-model="start_contract" type="date" class="form-control contract-dates">

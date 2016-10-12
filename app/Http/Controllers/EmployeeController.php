@@ -16,9 +16,6 @@ class EmployeeController extends Controller
         $imageName = $request->file('photo')->getClientOriginalName();
         $path = base_path() . '/public/uploads/consultants/images/';
         $request->file('photo')->move($path , $imageName);
-        // DB::table('consultants')
-        //     ->where('photo', $imageTempName)
-        //     ->update(['photo' => $imageName]);
     }
 
     public function getEmpsWithDesig($id)
@@ -56,6 +53,13 @@ class EmployeeController extends Controller
 	
     public function insert(Request $request)
     {
+        $this->validate($request, [
+            'fullname' => 'required',
+            'department' => 'required',
+            'designation' => 'required',
+            'date_hired' => 'required'
+        ]);
+
         $emp = new Employee;
         $emp->fullname = $request->input('fullname');
         $emp->department = $request->input('department');

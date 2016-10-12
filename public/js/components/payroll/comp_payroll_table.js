@@ -25,6 +25,8 @@ define([
 
     	data: function () {
             return {
+               employees: [],
+               departments: [],
                payrolls: [],
                payrollemps: []
             }
@@ -47,6 +49,25 @@ define([
         },
 
     	methods: {
+
+            getPayrollDepartment(payroll){
+                var self = this;
+                var departments = [];
+                var empIds = _.pluck(_.where(self.payrollemps, {pid: payroll.id}),'id');
+                _.each(empIds,function(i){
+                    var rsEmp = _.where(self.employees, {id: i});
+                    if (rsEmp.length) {
+                        var emp = rsEmp[0];
+                        var rsDep = _.where(self.departments, {id: emp.department});
+                        if (rsDep.length) {
+                            departments.push(rsDep[0].name);
+                        }
+                    }
+                });
+                var depNames = _.unique(departments).join(',  ');
+                payroll.department = depNames.toString().replace(',',' ');
+                return depNames
+            },
 
             getReduced(emps, key){
                 return _.reduce(_.pluck(emps, key), function(memo, num){ return memo + num; }, 0);
@@ -81,8 +102,17 @@ define([
                 $('#modal-payrollemp').modal('show');
                 var emps = _.where(self.payrollemps, {pid: payroll.id}, false);
                 var child = self.$children[0];
-                child.emps = emps;
+                child.emps = _.sortBy(self.assignIds(emps),'fullname');
                 child.payroll = payroll;
+            },
+
+            assignIds(emps){
+                var numbering = 0;
+                emps.forEach(function(model) {
+                    ++numbering;
+                    model.numbering = numbering;
+                });
+                return emps;
             },
 
     		setDate(payroll){
@@ -110,7 +140,7 @@ define([
     			var self = this, total = 0;
     			var list = _.where(self.payrollemps, {pid: payroll.id});
     			list.forEach(function(model) {
-    				total+= model[key]; 
+    				total+= Number(model[key]); 
     			});
     			payroll[key] = total;
     			return total;
@@ -120,13 +150,12 @@ define([
     			var self = this;
     			self.$http.get('/payroll_list_route').then( (response) => {
     				var json = JSON.parse(response.body);
-    				self.employees = json.employees;
+                    self.employees = json.employees;
     				self.payrollemps = json.payrollemps;
                     self.designations = json.designations;
-    				setTimeout(function(){
-	    				self.payrolls = json.payrolls;
-                        self.afterFetch();
-    				}, 200);
+                    self.departments = json.departments;
+	    			self.payrolls = json.payrolls;
+                    self.afterFetch();
     			}, (errorResp) => {
                     console.log('there are some errors, trying to fetch payroll, employee');
     				console.log(errorResp);

@@ -1,12 +1,28 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
+
 use App\Http\Requests;
+
 use App\Payrollemp as Payrollemp;
 
 class PayrollempController extends Controller
 {
+
+    public function updatePayrollemp(Request $request){
+        $payrollemp = Payrollemp::findOrFail($request->input('id'));
+        $payrollemp->rpd = $request->input('rpd');
+        $payrollemp->sss = $request->input('sss');
+        $payrollemp->phil = $request->input('phil');
+        $payrollemp->advances = $request->input('advances');
+        $rs = $payrollemp->save();
+        return response()->json([
+            'success' => $rs,
+            'emp_id'  => $request->input('emp_id')
+        ]);
+    }
 
     public function insert(Request $request)
     {

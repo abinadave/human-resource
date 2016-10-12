@@ -10,6 +10,11 @@ use App\Payrollemp as Payrollemp;
 
 class PayrollController extends Controller
 {
+
+    public function updatePayrollemp(){
+        echo "Hit";
+    }
+
     public function destroy($id)
     {
         $payroll = Payroll::findOrFail($id);

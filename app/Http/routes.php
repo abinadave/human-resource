@@ -15,6 +15,7 @@ Route::group(['middleware' => 'web'], function(){
 	
 	Route::get('/', 'HomeController@root');
 	Route::auth();
+	
 	Route::get('/home', 'HomeController@index');
 	Route::post('processLogin', 'UserController@login');
 	Route::post('employee', 'EmployeeController@insert');
@@ -36,15 +37,14 @@ Route::group(['middleware' => 'web'], function(){
 	Route::put('department', 'DepartmentController@edit');
 	Route::post('resignation_reason', 'ResignationReasonController@save');
 	Route::get('upload_employee_image/{id}', 'FilesController@renderUploadView');
-	Route::post('uploadFile', 'FilesController@uploadFile');
+	Route::post('uploadFile', 'FilesController@handleUpload');
 	Route::post('payroll', 'PayrollController@insert');
 	Route::post('payrollemps', 'PayrollempController@insert');
-
 	Route::get('payroll_list_route', 'FetcherController@forPayrollTable');
 	Route::get('route_employee_tbl', 'FetcherController@forEmployeeTable');
-
 	Route::delete('payroll/{id}', 'PayrollController@destroy');
 	Route::post('contract', 'ContractController@create');
+	Route::put('payrollemps', 'PayrollempController@updatePayrollemp');
 
 });
 

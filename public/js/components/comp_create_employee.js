@@ -159,17 +159,25 @@ define(
                   self.$http.post('/employee', obj).then((response) => {
                      var json = $.parseJSON(response.body);
                      if (json.id > 0) {
-                        self.createContract(json.id);
-                        self.fullname = '';
-                        self.rpd = '';
-                        self.department = '0';
-                        self.designation = '';
+                        self.afterSave();
+                        self.createContract(json.id); 
+                        self.fullname = ''; self.rpd = ''; self.department = '0'; self.designation = '';
                     }
-    		      }, (response) => {
-    		          // error callback
-    		      });
-                  console.log(obj);
+    		      }, (errorResp) => {
+    		          var json = JSON.parse(errorResp.body);
+                      var errors = [];
+                      $.each(json, function(index, val) {
+                           if (val.length) {
+                               errors.push(val[0]);
+                           }
+                      });
+                      console.log(errors);
+                  });
     		},
+
+            afterSave(){
+                self.error_fullname = '';  self.error_designation = ''; self.error_department = ''; self.error_date_hired = '';
+            },
 
             createContract(emp_id){
                 var self = this;

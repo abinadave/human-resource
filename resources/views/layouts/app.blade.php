@@ -8,13 +8,14 @@
     <title>Human Resource Management Systems</title>
     <!-- Fonts -->
     <link rel="stylesheet" type="text/css" href="{{ url('assets/dist/css/bootstrap.min.css') }}">
-   <!--  <link rel="stylesheet" type="text/css" href="{{ url('assets/dist/css/bootstrap-theme.min.css') }}"> -->
+    <link rel="stylesheet" type="text/css" href="{{ url('assets/dist/css/bootstrap-theme.min.css') }}">
     
     <style>
         body {
             margin-right: 6px;
         }
     </style>
+    
 </head>
 <body id="app-layout">
         <div id="app">

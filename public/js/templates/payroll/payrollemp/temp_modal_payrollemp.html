@@ -1,5 +1,5 @@
 <div class="modal fade" id="modal-payrollemp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="width: 67%">
+    <div class="modal-dialog" style="width: 80%">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -9,9 +9,10 @@
               <div id="print-this">
                 <h4 class="modal-title text-center" id="myModalLabel"><span>PAYROLL PERIOD: &nbsp;</span> {{ $parent.formatDate(payroll.date_from) }} - {{ $parent.formatDate(payroll.date_to) }}</h4>
                 <hr/>
-                <table class="table table-hover table-bordered table-condensed">
+                <table class="table table-hover table-bordered table-condensed" style="font-size: 12px">
                      <thead>
                         <tr>
+                            <th width="10">No.</th>
                             <th>Fullname</th>
                             <th class="text-center">Designation</th>
                             <th class="text-right" width="50" title="rate per day">RPD</th>
@@ -22,8 +23,9 @@
                         </tr>
                      </thead>
                      <tbody>
-                           <tr v-for="emp in emps">
-                               <td>{{ getFullname(emp.id) }}</td>
+                           <tr @click="setCurrentId(emp)" v-for="emp in emps">
+                               <td class="text-center">{{ emp.numbering }}</td>
+                               <td>{{ getFullname(emp.id) | uppercase }}</td>
                                <td class="text-center">{{ getDesignation(emp.id) }}</td>
                                <td class="text-right" title="Rate Per Day">{{ emp.rpd }}</td>
                                <td class="text-right">{{ emp.sss | currency '' }}</td>
@@ -33,21 +35,21 @@
                            </tr>
                      </tbody>
                      <tr>
-                         <td colspan="3" class="text-center"></td>
-                         <td class="text-right text-info" style="font-weight: bolder">{{ $parent.current_total_sss | currency '' }}</td> 
-                         <td class="text-right text-info" style="font-weight: bolder">{{ $parent.current_total_phil | currency '' }}</td> 
-                         <td class="text-right text-info" style="font-weight: bolder">{{ $parent.current_total_advances | currency '' }}</td>
-                         <td class="text-right text-info" style="font-weight: bolder; font-size: 16px">{{ $parent.current_total_net | currency 'Php '}}</td>
+                         <td colspan="4" class="text-center"></td>
+                         <td class="text-right text-info" style="font-weight: bolder">{{ getTotalSss | currency 'Php ' }}</td> 
+                         <td class="text-right text-info" style="font-weight: bolder">{{ getTotalPhil | currency 'Php ' }}</td> 
+                         <td class="text-right text-info" style="font-weight: bolder">{{ getTotalAdvances | currency 'Php ' }}</td>
+                         <td class="text-right text-danger" style="font-weight: bolder; font-size: 16px">{{ getTotalNet | currency 'Php ' }}</td>
                      </tr>
                 </table>
               </div>  
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button class="btn btn-default" @click="updatePayrollemp()"><span v-text="current_emp.fullname"></span> [edit]</button>
                 <button type="button" class="btn btn-primary" title="print this table" @click="printModal()"><i class="glyphicon glyphicon-print"></i></button>
             </div>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
 </div>
+<update-payrollemp></update-payrollemp>

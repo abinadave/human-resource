@@ -1,6 +1,5 @@
-Departments 
-<select v-model="selected" class="form-control" style="width: auto; display: inline">
-    <option>All</option>
+<select v-model="selected" class="form-control input-sm" style="width: auto; display: inline; font-size: 11px">
+    <option value="All" selected>Select Department</option>
     <option value="{{ dep.id }}" v-for="dep in $parent.departments">
     	{{ dep.name }}
     </option>

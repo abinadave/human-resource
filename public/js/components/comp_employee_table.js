@@ -29,7 +29,8 @@ define([
     			checkedEmps: [],
     			currentId: '',
     			checkAll: false,
-    			contracts: []
+    			contracts: [],
+    			photoEmployees: []
     		};
 		},
 
@@ -72,14 +73,49 @@ define([
 				
 			},
 
+			showPhotoEmployee(emp){
+				var self = this;
+				var $img = $('#img-employee');
+				clearTimeout(self.timer);
+				self.timer = setTimeout(function() {
+					var rs = _.where(self.photoEmployees, {emp_id: emp.id});
+					if (rs.length) {
+						var model = _.first(rs);
+						var file = model.emp_id + '-' + model.filename;
+						$img.attr('src','app/uploads/employees/'+file);						
+					}else {
+						$img.attr('src','assets/images/default.png');						
+					};
+				}, 500);
+			},
+
+			getContractExpiration(emp){
+				var self = this;
+				var latestContract = self.getLatestContract(emp);
+				if (latestContract) {
+					var end = $.trim(latestContract.split('-')[1]);
+					var str = end.split(' ');
+					var date = str[0] +' '+ str[1] +' '+ str[2];
+					return moment(date).fromNow();
+				}
+			},
+
 			udpateEmpContract(){
 				var self = this;
 				var emp = self.getEmp(self.currentId);
 				if (typeof emp === 'object') {
-					var contract = self.getLatestContract(emp).split('-');
-					self.updateStartContract = $.trim(contract[0]);
-					self.updateEndContract = $.trim(contract[1]);
-					$('#modal-update-contract').modal('show');
+					var latestContract = self.getLatestContract(emp);
+					if (latestContract !== undefined) {
+						var contract = latestContract.split('-');
+						self.updateStartContract = $.trim(contract[0]);
+						self.updateEndContract = $.trim(contract[1]);
+						$('#modal-update-contract').modal('show');
+					}else {
+						self.updateStartContract = '';
+						self.updateEndContract = '';
+						$('#modal-update-contract').modal('show');
+					}
+					
 				}
 			},
 
@@ -107,8 +143,7 @@ define([
 
 			addPicure(){
 				var self = this;
-				var model = self.findModel(self.currentId)[0];
-				window.location = '/upload_employee_image/'+model.id;
+				window.location = '/upload_employee_image/'+self.currentId;
 			},
 
 			setCurretId(i){
@@ -144,8 +179,11 @@ define([
 
 			updateEmployee(event){
 				event.preventDefault();
+				var $modal = $('#modalUpdateEmployee');
 				var self = this;
 				var id = self.update_hidden_id;
+				$modal.find(':submit').prop('disabled', true).text('updating please wait..');
+
 				var obj = {
 					fullname: self.update_fullname,
 					department: self.update_department,
@@ -162,8 +200,19 @@ define([
 						    model.fullname = self.update_fullname; model.department = self.update_department; model.designation = self.update_designation; model.rpd = self.update_rpd;						    
 						});	
 						$('#modalUpdateEmployee').modal('hide');
+						require(['alertify'], function(alertify){
+						    alertify.success('Employee saved');
+						});
 					}
-				}, (data) => {});
+				}, (data) => {
+
+				});
+
+				setTimeout(function() {
+					$modal.find(':submit').prop('disabled', false).text('Save changes');
+				}, 5000);
+
+
 
 			},
 
@@ -186,24 +235,37 @@ define([
 
 			deleteEmployee(emp){
 				var self = this;
-				var ok = confirm('Are you sure ?');
-				if (ok) {
-					var reason = prompt('Enter reason for resignation');
-					self.saveReasonResignation(emp, reason);
-				}
+				require([
+					'alertify'
+					], function(alertify){
+					alertify.defaults.glossary.title = 'Confirmation';
+				    alertify.confirm('Are you sure you want to delete <b class="text-info">'+ emp.fullname.toUpperCase() +'</b> ?', function(e){
+				    	if (e) {
+				    		var reason = prompt('Enter reason for resignation');
+							self.saveReasonResignation(emp, reason);
+				    	}
+				    });
+				});
 			},
 
 			saveReasonResignation(emp, reason){
 				var self = this;
-				self.$http.post('/resignation_reason', {
-					emp_id: emp.id,
-					reason: reason
-				}).then((response) => {
-					var json = JSON.parse(response.body);
-					if (json.success) { self.removeEmp(emp); };
-				}, (errorResp) => {
-					console.log(errorResp);
-				});
+				if (reason) {
+					self.$http.post('/resignation_reason', {
+						emp_id: emp.id,
+						reason: reason
+					}).then((response) => {
+						var json = JSON.parse(response.body);
+						if (json.success) { self.removeEmp(emp); };
+					}, (errorResp) => {
+						console.log(errorResp);
+					});
+				}else {
+					require(['alertify'], function(alertify){
+					    alertify.warning('Reason for resignation is required');
+					});
+				}
+				
 			},
 
 			removeEmp(emp){
@@ -250,6 +312,7 @@ define([
 					self.designations = json.designations;
 					self.departments = json.departments;
 					self.employees = json.employees;
+					self.photoEmployees = json.photo_employees;
 				}, (errResponse) => {
 					console.log(errorResp);
 				});
